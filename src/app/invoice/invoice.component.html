@@ -1,0 +1,98 @@
+<div class="container position-relative">
+  <button
+    mat-raised-button
+    class="mt-3"
+    color="accent"
+    routerLink="/customer/{{customerId}}/addInvoice"
+    [disabled]="!enableCreateNewInvoice"
+  >
+    <mat-icon>playlist_add</mat-icon> Nuova Fattura
+  </button>
+  <div class="position-absolute end-0 top-0 me-3 mt-4">
+    <span *ngIf="isLoading">Aggiorno...<mat-icon class="spinner">sync</mat-icon></span>
+    <span *ngIf="!isLoading">Aggiornato <mat-icon>task_alt</mat-icon></span>
+  </div>
+  <mat-form-field appearance="standard" class="w-100">
+    <mat-label><mat-icon>search</mat-icon> Cerca Fattura</mat-label>
+    <input matInput (keyup)="applyFilter(input.value)" #input />
+  </mat-form-field>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="w-100" matSort>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+        <td mat-cell *matCellDef="let row">{{ row.data | date: 'dd MMM YYY'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="numero">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Numero</th>
+        <td mat-cell *matCellDef="let row">{{ row.numero }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="anno">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Anno</th>
+        <td mat-cell *matCellDef="let row">{{ row.anno }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="importo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Importo</th>
+        <td mat-cell *matCellDef="let row">{{ row.importo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="statoStr">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stato</th>
+        <td mat-cell *matCellDef="let row">{{ row.statoStr }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="clienteStr">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+        <td mat-cell *matCellDef="let row">{{ row.clienteStr }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="azioni">
+        <th mat-header-cell *matHeaderCellDef>Azioni</th>
+        <td mat-cell *matCellDef="let row">
+          <button
+            mat-icon-button
+            color="accent"
+            routerLink="/customer/{{row.cliente.id}}/editInvoice/{{row.id}}"
+            [disabled]="!admin"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [disabled]="!admin"
+            color="warn"
+            (click)="openDialog(row.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [length]="tableLenght"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="pageEvent = $event"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
+</div>

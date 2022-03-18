@@ -1,0 +1,88 @@
+<div class="container pt-3">
+  <div class="d-flex justify-content-center mt-4" *ngIf="isLoading">
+    <mat-icon class="spinner-big">sync</mat-icon>
+  </div>
+  <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading">
+    <h2 *ngIf="!invoiceId">Aggiungi Fattura n.{{invoiceNum}} per {{ragioneSociale}}</h2>
+    <h2 *ngIf="invoiceId">Modifica Fattura n.{{invoiceNum}} di {{ragioneSociale}}</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Data</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        name="data"
+        id="data"
+        formControlName="data"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="invoiceForm.invalid">{{
+        getErrData()
+      }}</mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="outline">
+      <mat-label>Numero</mat-label>
+      <input
+        matInput
+        type="number"
+        name="numero"
+        id="numero"
+        formControlName="numero"
+      />
+      <mat-error *ngIf="invoiceForm.invalid">{{
+        getErrNumero()
+      }}</mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="outline" YearOnly>
+      <mat-label>Anno</mat-label>
+      <input matInput [matDatepicker]="dp" [formControl]="anno" />
+      <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+      <mat-datepicker
+        #dp
+        startView="multi-year"
+        (yearSelected)="chosenYearHandler($event, dp)"
+      >
+      </mat-datepicker>
+      <mat-error *ngIf="invoiceForm.invalid">{{
+        getErrAnno()
+      }}</mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field appearance="outline">
+      <mat-label>Importo</mat-label>
+      <input
+        matInput
+        type="number"
+        name="importo"
+        id="importo"
+        formControlName="importo"
+      />
+      <mat-error *ngIf="invoiceForm.invalid">{{
+        getErrImporto()
+      }}</mat-error>
+    </mat-form-field>
+    <br>
+    <span formGroupName="stato">
+      <mat-form-field appearance="outline">
+        <mat-label>Stato</mat-label>
+        <mat-select
+          matInput
+          type="text"
+          name="stato"
+          id="stato"
+          formControlName="id"
+        >
+          <mat-option value="1">Pagata</mat-option>
+          <mat-option value="2">Non Pagata</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </span>
+    <br>
+    <button *ngIf="!invoiceId" mat-raised-button color="accent" (click)="onSubmit()" [disabled]="isSending"><mat-icon>add</mat-icon> Aggiungi Fattura</button>
+    <button *ngIf="invoiceId" mat-raised-button color="accent" (click)="onSubmit()"><mat-icon>save</mat-icon> Salva Modifiche</button>
+    <br>
+    <button mat-raised-button type="button" (click)="goBack()">Annulla</button>
+  </form>
+</div>

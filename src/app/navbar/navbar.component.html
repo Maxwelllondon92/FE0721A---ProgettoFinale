@@ -1,0 +1,21 @@
+<mat-toolbar color="primary" class="d-flex justify-content-between">
+  <h1>Ciao, {{ userName }}</h1>
+  <div class="">
+    <button mat-button routerLink="/customer" *ngIf="userLogged">
+      <mat-icon>people_alt</mat-icon><span>Clienti</span>
+    </button>
+    <button mat-button routerLink="/invoice" *ngIf="userLogged">
+      <mat-icon>receipt_long</mat-icon><span>Fatture</span>
+    </button>
+    <button mat-button routerLink="/user" *ngIf="userLogged&&admin">
+      <mat-icon>account_circle</mat-icon>
+      <span>Utenti</span>
+    </button>
+    <button mat-button routerLink="/auth" *ngIf="userLogged" (click)="logout()">
+      <mat-icon>logout</mat-icon><span>Esci</span>
+    </button>
+    <button mat-button routerLink="/auth" *ngIf="!userLogged">
+      <mat-icon>account_circle</mat-icon><span>Accedi</span>
+    </button>
+  </div>
+</mat-toolbar>
